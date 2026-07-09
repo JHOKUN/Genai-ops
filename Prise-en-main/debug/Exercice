@@ -1,0 +1,21 @@
+#!/bin/bash
+
+containers = $(docker ps -a --format={{.Names}})
+
+for c in $containers
+do
+
+    Ip = $(docker inspect  --format='{{NetworkSettings.IPADRESS}}' $c)
+    Ipp = $(docker inspect  --format='{{NetworkSettings.IPPrefixLen}}' $c)
+    Mac = $(docker inspect --format = '{{NetworkSettings.MacAddress}}' $c)
+    Gate = $(docker inspect --format = '{{NetworkSettings.Gateway}}' $c)
+    Ports = $(docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}}{{println "\t  -" $p ":" (index $conf 0).HostPort}}{{end}}' $container | sed -e 's/ : /:/')
+
+    echo -e "$c :"
+    echho -e "\tIP : $Ip/$Ipp"
+    echho -e "\tMacAddress : $Mac"
+    echho -e "\tGateway : $Gate"
+    echho -e "\tPorts : \n${Ports//\/tcp/}\n"
+
+done
+
