@@ -38,15 +38,9 @@ def about():
     return 'The about page'
 
 @app.route('/redirect')
-def redirect():
-    return redirect(url_for('login'))
+def handle_redirect():
+    return redirect(url_for('logout'))
 
-@app.errorhandler(404)
-def not_found(error):
-    resp = make_response(render_template('error.html'), 404)
-    resp.headers['X-Something'] = 'A value'
-    return resp
-
-@app.route('/login')
-def login():
+@app.route('/logout')
+def logout():
     abort(401)
